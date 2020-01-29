@@ -11,6 +11,16 @@ public:
 	Level(sf::RenderWindow* hwnd, Input* in);
 	~Level();
 
+	sf::CircleShape circle;
+	float speed;
+	sf::RectangleShape rect;
+	float rectspeed;
+
+	sf::Vector2u _winsize;
+	sf::Vector2f _circlepos;
+	bool toright;
+	sf::Vector2f _rectpos;
+
 	void handleInput(float dt);
 	void update(float dt);
 	void render();
