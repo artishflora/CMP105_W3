@@ -20,8 +20,19 @@ Level::Level(sf::RenderWindow* hwnd, Input* in)
 	rect.setPosition(sf::Vector2f(300.f, 300.f));
 	rectspeed = 100.f;
 
+	bouncer.setFillColor(sf::Color::Magenta);
+	bouncer.setOutlineColor(sf::Color::Black);
+	bouncer.setOutlineThickness(1.f);
+	bouncer.setRadius(50.f);
+	bouncer.setPosition(sf::Vector2f(0.f, 300.f));
+	bouncerspeed = 75.f;
+
 	_winsize = window->getSize();
 	toright = true;
+	lefttop = true;
+	topright = false;
+	rightbot = false;
+	botleft = false;
 }
 
 Level::~Level()
@@ -40,11 +51,12 @@ void Level::update(float dt)
 {
 	_circlepos = circle.getPosition();
 	_rectpos = rect.getPosition();
+	_bouncerpos = bouncer.getPosition();
 	_winsize = window->getSize();
 
 	if (toright)
 	{
-		if (_circlepos.x < _winsize.x-circle.getRadius()-circle.getOutlineThickness()) circle.move(speed * dt, 0);
+		if (_circlepos.x < _winsize.x-circle.getRadius()*2-circle.getOutlineThickness()) circle.move(speed * dt, 0);
 		else toright = false;
 	}
 	else if (!toright)
@@ -69,6 +81,45 @@ void Level::update(float dt)
 	{
 		if (_rectpos.y < _winsize.y) rect.move(0, (rectspeed * dt));
 	}
+
+	if (lefttop)
+	{
+		if (_bouncerpos.y > 0) bouncer.move(bouncerspeed * dt, -(bouncerspeed / 1.75f * dt));
+		else
+		{
+			lefttop = false;
+			topright = true;
+		}
+	}
+	else if (topright)
+	{
+		if (_bouncerpos.x < _winsize.x - bouncer.getRadius()*2) bouncer.move(bouncerspeed * dt, bouncerspeed / 2 * dt);
+		else
+		{
+			topright = false;
+			rightbot = true;
+		}
+
+	}
+	else if (rightbot)
+	{
+		if (_bouncerpos.y < _winsize.y-bouncer.getRadius()*2) bouncer.move(-(bouncerspeed * dt), bouncerspeed / 2 * dt);
+		else
+		{
+			rightbot = false;
+			botleft = true;
+		}
+	}
+	else if (botleft)
+	{
+		if (_bouncerpos.x > 0) bouncer.move(-(bouncerspeed * dt), -(bouncerspeed / 2 * dt));
+		else
+		{
+			botleft = false;
+			lefttop = true;
+		}
+
+	}
 }
 
 // Render level
@@ -78,6 +129,7 @@ void Level::render()
 
 	window->draw(circle);
 	window->draw(rect);
+	window->draw(bouncer);
 
 	endDraw();
 }

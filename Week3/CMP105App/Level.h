@@ -13,13 +13,20 @@ public:
 
 	sf::CircleShape circle;
 	float speed;
+	bool toright;
 	sf::RectangleShape rect;
 	float rectspeed;
+	sf::CircleShape bouncer;
+	float bouncerspeed;
+	bool lefttop;
+	bool topright;
+	bool rightbot;
+	bool botleft;
 
 	sf::Vector2u _winsize;
 	sf::Vector2f _circlepos;
-	bool toright;
 	sf::Vector2f _rectpos;
+	sf::Vector2f _bouncerpos;
 
 	void handleInput(float dt);
 	void update(float dt);
