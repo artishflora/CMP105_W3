@@ -22,6 +22,7 @@ public:
 	bool topright;
 	bool rightbot;
 	bool botleft;
+	bool touching;
 
 	sf::Vector2u _winsize;
 	sf::Vector2f _circlepos;

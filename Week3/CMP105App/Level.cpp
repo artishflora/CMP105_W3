@@ -1,4 +1,6 @@
 #include "Level.h"
+#include <ctime>
+#include <cstdlib>
 
 Level::Level(sf::RenderWindow* hwnd, Input* in)
 {
@@ -33,6 +35,8 @@ Level::Level(sf::RenderWindow* hwnd, Input* in)
 	topright = false;
 	rightbot = false;
 	botleft = false;
+	touching = false;
+	srand(time(0));
 }
 
 Level::~Level()
@@ -120,6 +124,80 @@ void Level::update(float dt)
 		}
 
 	}
+
+	sf::Vector2f circorg = circle.getPosition();
+	circorg.x += circle.getRadius();
+	circorg.y += circle.getRadius();
+	sf::Vector2f bounceorg = bouncer.getPosition();
+	bounceorg.x += bouncer.getRadius();
+	bounceorg.y += bouncer.getRadius();
+	int distx = abs(circorg.x - bounceorg.x);
+	int disty = abs(circorg.y - bounceorg.y);
+	float distoforgs = sqrt((distx * distx) + (disty * disty));
+	if ((distoforgs <= ((circle.getRadius() + circle.getOutlineThickness()) + (bouncer.getRadius() + bouncer.getOutlineThickness()))) && (!touching))
+	{
+		touching = true;
+		std::cout << "ouch" << std::endl;
+
+		int circcol = rand() % 8 + 1;
+		int bouncecol = rand() % 8 + 1;
+
+		switch (circcol)
+		{
+		case 1:
+			circle.setFillColor(sf::Color::Black);
+			break;
+		case 2:
+			circle.setFillColor(sf::Color::Blue);
+			break;
+		case 3:
+			circle.setFillColor(sf::Color::Cyan);
+			break;
+		case 4:
+			circle.setFillColor(sf::Color::Green);
+			break;
+		case 5:
+			circle.setFillColor(sf::Color::Magenta);
+			break;
+		case 6:
+			circle.setFillColor(sf::Color::Red);
+			break;
+		case 7:
+			circle.setFillColor(sf::Color::White);
+			break;
+		case 8:
+			circle.setFillColor(sf::Color::Yellow);
+			break;
+		}
+		switch (bouncecol)
+		{
+		case 1:
+			bouncer.setFillColor(sf::Color::Black);
+			break;
+		case 2:
+			bouncer.setFillColor(sf::Color::Blue);
+			break;
+		case 3:
+			bouncer.setFillColor(sf::Color::Cyan);
+			break;
+		case 4:
+			bouncer.setFillColor(sf::Color::Green);
+			break;
+		case 5:
+			bouncer.setFillColor(sf::Color::Magenta);
+			break;
+		case 6:
+			bouncer.setFillColor(sf::Color::Red);
+			break;
+		case 7:
+			bouncer.setFillColor(sf::Color::White);
+			break;
+		case 8:
+			bouncer.setFillColor(sf::Color::Yellow);
+			break;
+		}
+	}
+	else if (distoforgs > ((circle.getRadius() + circle.getOutlineThickness()) + (bouncer.getRadius() + bouncer.getOutlineThickness()))) touching = false;
 }
 
 // Render level
